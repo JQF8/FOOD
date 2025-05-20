@@ -40,7 +40,7 @@ const IncreaseEatingScreen: React.FC = () => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView>
-        <View style={[styles.header, { backgroundColor: '#FF6B6B' }]}>
+        <View style={[styles.header, { backgroundColor: colors.primary }]}>
           <Text style={[styles.title, { color: '#FFFFFF' }]}>Increase Eating</Text>
           <Text style={[styles.subtitle, { color: '#FFFFFF' }]}>Healthy weight gain foods</Text>
         </View>
@@ -48,7 +48,7 @@ const IncreaseEatingScreen: React.FC = () => {
         {foodCategories.map((category, index) => (
           <View key={index} style={styles.section}>
             <View style={styles.categoryHeader}>
-              <Icon name={category.icon} size={24} color="#FF6B6B" />
+              <Icon name={category.icon} size={24} color={colors.primary} />
               <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
             </View>
 
@@ -60,7 +60,7 @@ const IncreaseEatingScreen: React.FC = () => {
                 <View style={styles.foodInfo}>
                   <Text style={[styles.foodName, { color: colors.text }]}>{food.name}</Text>
                   <Text style={[styles.foodBenefits, { color: colors.text }]}>{food.benefits}</Text>
-                  <Text style={[styles.calories, { color: '#FF6B6B' }]}>{food.calories}</Text>
+                  <Text style={[styles.calories, { color: colors.primary }]}>{food.calories}</Text>
                 </View>
                 <Icon name="chevron-right" size={24} color={colors.text} />
               </TouchableOpacity>
@@ -71,7 +71,7 @@ const IncreaseEatingScreen: React.FC = () => {
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Meal Planning</Text>
           <TouchableOpacity style={[styles.mealPlanCard, { backgroundColor: colors.card }]}>
-            <Icon name="calendar-clock" size={24} color="#FF6B6B" />
+            <Icon name="calendar-clock" size={24} color={colors.primary} />
             <View style={styles.mealPlanInfo}>
               <Text style={[styles.mealPlanTitle, { color: colors.text }]}>Create Weekly Meal Plan</Text>
               <Text style={[styles.mealPlanDescription, { color: colors.text }]}>

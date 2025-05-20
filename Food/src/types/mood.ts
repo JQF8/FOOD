@@ -1,0 +1,1 @@
+export type Mood = 'happy' | 'soso' | 'stress_anxiety' | 'tired'; 

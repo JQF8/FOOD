@@ -35,6 +35,11 @@ const MainTabs = () => {
           paddingTop: 10,
         },
         headerShown: false,
+        tabBarShowLabel: true,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
       }}
     >
       <Tab.Screen
@@ -46,10 +51,6 @@ const MainTabs = () => {
               <Icon name="home" size={focused ? 28 : 24} color={color} />
             </View>
           ),
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: '600',
-          },
         }}
       />
       <Tab.Screen
@@ -75,18 +76,6 @@ const MainTabs = () => {
         }}
       />
       <Tab.Screen
-        name="IncreaseEating"
-        component={IncreaseEatingScreen}
-        options={{
-          tabBarLabel: 'Gain',
-          tabBarIcon: ({ color, size, focused }) => (
-            <View style={[styles.tabIconContainer, focused && { backgroundColor: '#FF6B6B20' }]}>
-              <Icon name="food-variant" size={focused ? 28 : 24} color="#FF6B6B" />
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -95,10 +84,6 @@ const MainTabs = () => {
               <Icon name="account" size={focused ? 28 : 24} color={color} />
             </View>
           ),
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: '600',
-          },
         }}
       />
     </Tab.Navigator>
@@ -120,10 +105,32 @@ const Navigation = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}
       >
-        <Stack.Screen name="Main" component={MainTabs} />
-        <Stack.Screen name="FoodDetail" component={FoodDetailScreen} />
+        <Stack.Screen 
+          name="Main" 
+          component={MainTabs}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen 
+          name="FoodDetail" 
+          component={FoodDetailScreen}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen 
+          name="IncreaseEating" 
+          component={IncreaseEatingScreen}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

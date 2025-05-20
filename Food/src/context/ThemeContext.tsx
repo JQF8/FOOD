@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useColorScheme } from 'react-native';
 
 type Theme = 'light' | 'dark';
@@ -52,17 +52,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setTheme] = useState<Theme>(systemTheme === 'dark' ? 'dark' : 'light');
 
   useEffect(() => {
-    setTheme(systemTheme === 'dark' ? 'dark' : 'light');
+    if (systemTheme) {
+      setTheme(systemTheme === 'dark' ? 'dark' : 'light');
+    }
   }, [systemTheme]);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
+  }, []);
 
   const colors = theme === 'light' ? lightColors : darkColors;
 
+  const value = React.useMemo(() => ({
+    theme,
+    colors,
+    toggleTheme,
+  }), [theme, colors, toggleTheme]);
+
   return (
-    <ThemeContext.Provider value={{ theme, colors, toggleTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

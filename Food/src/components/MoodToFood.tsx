@@ -9,6 +9,25 @@ type Mood = 'stress' | 'anxious' | 'tired' | 'insomnia';
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const PANEL_HEIGHT = SCREEN_HEIGHT * 0.6;
 
+const moodColors = {
+  stress: {
+    primary: '#FF6B6B', // Warm red for stress
+    secondary: '#FFE3E3',
+  },
+  anxious: {
+    primary: '#4ECDC4', // Cool teal for anxious
+    secondary: '#E0F7F5',
+  },
+  tired: {
+    primary: '#FFD93D', // Warm yellow for tired
+    secondary: '#FFF9E6',
+  },
+  insomnia: {
+    primary: '#9C27B0', // Purple for insomnia
+    secondary: '#F3E5F5',
+  },
+};
+
 const moodSuggestions = {
   stress: {
     food: 'Dark Chocolate',
@@ -94,15 +113,18 @@ export const MoodToFood = () => {
   };
 
   const renderAnimation = (mood: Mood) => {
+    const moodColor = moodColors[mood];
+    
     switch (mood) {
       case 'stress':
         return (
           <Svg width="100" height="100" viewBox="0 0 100 100">
-            <Circle cx="50" cy="50" r="40" fill={colors.primary} opacity="0.2" />
+            <Circle cx="50" cy="50" r="40" fill={moodColor.secondary} />
+            <Circle cx="50" cy="50" r="35" fill="none" stroke={moodColor.primary} strokeWidth="4" />
             <Path
               d="M30 50 Q50 30 70 50 Q50 70 30 50"
               fill="none"
-              stroke={colors.primary}
+              stroke={moodColor.primary}
               strokeWidth="4"
             />
           </Svg>
@@ -110,11 +132,12 @@ export const MoodToFood = () => {
       case 'anxious':
         return (
           <Svg width="100" height="100" viewBox="0 0 100 100">
-            <Circle cx="50" cy="50" r="40" fill={colors.primary} opacity="0.2" />
+            <Circle cx="50" cy="50" r="40" fill={moodColor.secondary} />
+            <Circle cx="50" cy="50" r="35" fill="none" stroke={moodColor.primary} strokeWidth="4" />
             <Path
               d="M30 40 Q50 60 70 40"
               fill="none"
-              stroke={colors.primary}
+              stroke={moodColor.primary}
               strokeWidth="4"
             />
           </Svg>
@@ -122,11 +145,12 @@ export const MoodToFood = () => {
       case 'tired':
         return (
           <Svg width="100" height="100" viewBox="0 0 100 100">
-            <Circle cx="50" cy="50" r="40" fill={colors.primary} opacity="0.2" />
+            <Circle cx="50" cy="50" r="40" fill={moodColor.secondary} />
+            <Circle cx="50" cy="50" r="35" fill="none" stroke={moodColor.primary} strokeWidth="4" />
             <Path
               d="M30 50 Q50 30 70 50"
               fill="none"
-              stroke={colors.primary}
+              stroke={moodColor.primary}
               strokeWidth="4"
             />
           </Svg>
@@ -134,11 +158,12 @@ export const MoodToFood = () => {
       case 'insomnia':
         return (
           <Svg width="100" height="100" viewBox="0 0 100 100">
-            <Circle cx="50" cy="50" r="40" fill={colors.primary} opacity="0.2" />
+            <Circle cx="50" cy="50" r="40" fill={moodColor.secondary} />
+            <Circle cx="50" cy="50" r="35" fill="none" stroke={moodColor.primary} strokeWidth="4" />
             <Path
               d="M30 50 Q50 70 70 50"
               fill="none"
-              stroke={colors.primary}
+              stroke={moodColor.primary}
               strokeWidth="4"
             />
           </Svg>
@@ -158,21 +183,21 @@ export const MoodToFood = () => {
             key={mood}
             style={[
               styles.moodButton,
-              selectedMood === mood && { backgroundColor: colors.primary },
+              selectedMood === mood && { backgroundColor: moodColors[mood as Mood].primary },
             ]}
             onPress={() => handleMoodSelect(mood as Mood)}
           >
             <Icon
-              name={mood === 'stress' ? 'emoticon-sad' :
-                    mood === 'anxious' ? 'emoticon-nervous' :
-                    mood === 'tired' ? 'emoticon-tired' :
-                    'emoticon-sleep'}
+              name={mood === 'stress' ? 'emoticon-sad-outline' :
+                    mood === 'anxious' ? 'emoticon-confused-outline' :
+                    mood === 'tired' ? 'emoticon-exhausted-outline' :
+                    'sleep'}
               size={24}
-              color={selectedMood === mood ? '#FFFFFF' : colors.text}
+              color={selectedMood === mood ? '#FFFFFF' : moodColors[mood as Mood].primary}
             />
             <Text style={[
               styles.moodText,
-              { color: selectedMood === mood ? '#FFFFFF' : colors.text }
+              { color: selectedMood === mood ? '#FFFFFF' : moodColors[mood as Mood].primary }
             ]}>
               {mood.charAt(0).toUpperCase() + mood.slice(1)}
             </Text>
@@ -192,7 +217,7 @@ export const MoodToFood = () => {
           ]}
           {...panResponder.panHandlers}
         >
-          <View style={styles.dragHandle} />
+          <View style={[styles.dragHandle, { backgroundColor: moodColors[selectedMood].primary }]} />
           <View style={styles.suggestionContent}>
             <View style={styles.animationWrapper}>
               {renderAnimation(selectedMood)}
@@ -200,7 +225,7 @@ export const MoodToFood = () => {
             <Icon
               name={moodSuggestions[selectedMood].icon}
               size={32}
-              color={colors.primary}
+              color={moodColors[selectedMood].primary}
             />
             <Text style={[styles.foodTitle, { color: colors.text }]}>
               {moodSuggestions[selectedMood].food}
@@ -269,7 +294,6 @@ const styles = StyleSheet.create({
   dragHandle: {
     width: 40,
     height: 4,
-    backgroundColor: '#CCCCCC',
     borderRadius: 2,
     alignSelf: 'center',
     marginTop: 12,

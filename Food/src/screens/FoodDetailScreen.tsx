@@ -3,24 +3,14 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/ThemeContext';
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
 
-interface FoodDetailScreenProps {
-  route: {
-    params: {
-      food: {
-        name: string;
-        benefits: string;
-        category: string;
-      };
-    };
-  };
-}
+type Props = NativeStackScreenProps<RootStackParamList, 'FoodDetail'>;
 
-const FoodDetailScreen: React.FC<FoodDetailScreenProps> = ({ route }) => {
+const FoodDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { food } = route.params;
   const { colors } = useTheme();
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
