@@ -4,33 +4,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Mood } from '../types/mood';
 import { moodColor } from '../constants/moodColor';
 import { useTheme } from '../context/ThemeContext';
-import { useMood } from '../context/MoodContext';
 
 interface FeelingButtonProps {
   mood: Mood;
   label: string;
+  onPress: () => void;
 }
 
-export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label }) => {
-  console.log('[FeelingButton] Rendering with mood:', mood, 'label:', label);
+export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label, onPress }) => {
   const { colors } = useTheme();
-  const { setMood, isInitialized } = useMood();
-
-  const handlePress = async () => {
-    if (!isInitialized) {
-      console.log('[FeelingButton] Context not initialized, ignoring press');
-      return;
-    }
-
-    try {
-      console.log('[FeelingButton] Pressed, setting mood:', mood);
-      const today = new Date().toISOString().split('T')[0];
-      await setMood(today, mood);
-      console.log('[FeelingButton] Mood set successfully');
-    } catch (error) {
-      console.error('[FeelingButton] Error setting mood:', error);
-    }
-  };
 
   const getIconName = (mood: Mood): string => {
     switch (mood) {
@@ -38,7 +20,7 @@ export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label }) => 
         return 'emoticon-happy-outline';
       case 'soso':
         return 'emoticon-neutral-outline';
-      case 'stress_anxiety':
+      case 'stressed':
         return 'emoticon-sad-outline';
       case 'tired':
         return 'sleep';
@@ -49,15 +31,8 @@ export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label }) => 
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button, 
-        { 
-          backgroundColor: colors.card,
-          opacity: isInitialized ? 1 : 0.5 
-        }
-      ]}
-      onPress={handlePress}
-      disabled={!isInitialized}
+      style={[styles.button, { backgroundColor: colors.card }]}
+      onPress={onPress}
     >
       <Icon name={getIconName(mood)} size={24} color={moodColor[mood]} />
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>

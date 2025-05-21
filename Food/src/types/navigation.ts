@@ -1,0 +1,15 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+export type RootStackParamList = {
+  Main: undefined;
+  FoodDetail: { id: string };
+  IncreaseEating: undefined;
+  MoodCalendar: { initialDate?: string };
+  InsightsFeed: undefined;
+  InsightDetail: { id: string };
+};
+
+export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
+  RootStackParamList,
+  T
+>; 

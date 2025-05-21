@@ -2,14 +2,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Main: undefined;
-  FoodDetail: {
-    food: {
-      name: string;
-      benefits: string;
-      category: string;
-    };
-  };
+  Home: undefined;
+  MoodCalendar: { initialDate?: string };
   IncreaseEating: undefined;
+  InsightsFeed: undefined;
+  InsightDetail: { id: string };
+  PersonalInformation: undefined;
+  DietPreferences: undefined;
+  FoodDetail: { id: string };
 };
 
 export type MainTabParamList = {
@@ -25,4 +25,7 @@ export type AuthStackParamList = {
   ForgotPassword: undefined;
 };
 
-export type FoodDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'FoodDetail'>; 
+export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
+  RootStackParamList,
+  T
+>; 

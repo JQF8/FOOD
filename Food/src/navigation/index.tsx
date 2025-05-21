@@ -5,6 +5,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { enableScreens } from 'react-native-screens';
+
+// Enable screens for better performance
+enableScreens();
 
 import HomeScreen from '../screens/HomeScreen';
 import WellnessScreen from '../screens/WellnessScreen';
@@ -12,6 +16,11 @@ import FoodScreen from '../screens/FoodScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import FoodDetailScreen from '../screens/FoodDetailScreen';
 import IncreaseEatingScreen from '../screens/IncreaseEatingScreen';
+import { MoodCalendarScreen } from '../screens/MoodCalendarScreen';
+import InsightsFeed from '../screens/InsightsFeed';
+import InsightDetailScreen from '../screens/InsightDetailScreen';
+import PersonalInformationScreen from '../screens/PersonalInformationScreen';
+import DietPreferencesScreen from '../screens/DietPreferencesScreen';
 
 import { RootStackParamList, MainTabParamList } from './types';
 
@@ -103,33 +112,45 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="Main"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
         }}
       >
         <Stack.Screen 
           name="Main" 
           component={MainTabs}
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen 
           name="FoodDetail" 
           component={FoodDetailScreen}
-          options={{
-            headerShown: false,
-            animation: 'slide_from_right',
-          }}
         />
         <Stack.Screen 
           name="IncreaseEating" 
           component={IncreaseEatingScreen}
-          options={{
-            headerShown: false,
-            animation: 'slide_from_right',
-          }}
+        />
+        <Stack.Screen 
+          name="MoodCalendar" 
+          component={MoodCalendarScreen}
+        />
+        <Stack.Screen 
+          name="InsightsFeed" 
+          component={InsightsFeed}
+        />
+        <Stack.Screen 
+          name="InsightDetail" 
+          component={InsightDetailScreen}
+        />
+        <Stack.Screen 
+          name="PersonalInformation" 
+          component={PersonalInformationScreen}
+        />
+        <Stack.Screen 
+          name="DietPreferences" 
+          component={DietPreferencesScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
