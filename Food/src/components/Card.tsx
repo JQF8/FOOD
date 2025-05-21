@@ -1,28 +1,38 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import theme from '@utils/theme';
+import { View, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 interface CardProps {
   children: React.ReactNode;
   style?: ViewStyle;
+  onPress?: () => void;
   variant?: 'elevated' | 'outlined' | 'flat';
 }
 
 const Card: React.FC<CardProps> = ({
   children,
   style,
+  onPress,
   variant = 'elevated',
 }) => {
+  const { colors } = useTheme();
+
   const getShadowStyle = () => {
     switch (variant) {
       case 'elevated':
-        return theme.shadows.medium;
+        return {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
+        };
       case 'outlined':
         return {};
       case 'flat':
         return {};
       default:
-        return theme.shadows.medium;
+        return {};
     }
   };
 
@@ -33,7 +43,7 @@ const Card: React.FC<CardProps> = ({
       case 'outlined':
         return {
           borderWidth: 1,
-          borderColor: theme.colors.border,
+          borderColor: colors.border,
         };
       case 'flat':
         return {};
@@ -41,6 +51,22 @@ const Card: React.FC<CardProps> = ({
         return {};
     }
   };
+
+  if (onPress) {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.card,
+          getShadowStyle(),
+          getBorderStyle(),
+          style,
+        ]}
+        onPress={onPress}
+      >
+        {children}
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <View
@@ -58,9 +84,8 @@ const Card: React.FC<CardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: theme.colors.white,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.md,
+    borderRadius: 12,
+    overflow: 'hidden',
   },
 });
 

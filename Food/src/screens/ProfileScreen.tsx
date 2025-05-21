@@ -3,20 +3,26 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 're
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const ProfileScreen: React.FC = () => {
   const { colors, theme, toggleTheme } = useTheme();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const menuItems = [
     {
       title: 'Personal Information',
       icon: 'account-circle',
-      onPress: () => {},
+      onPress: () => navigation.navigate('PersonalInformation'),
     },
     {
       title: 'Diet Preferences',
       icon: 'food-apple',
-      onPress: () => {},
+      onPress: () => navigation.navigate('DietPreferences'),
     },
     {
       title: 'Health Goals',

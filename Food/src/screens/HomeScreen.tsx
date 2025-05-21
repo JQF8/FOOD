@@ -15,6 +15,7 @@ import { getPartOfDay } from '../utils/timeUtils';
 import NoteSheet, { NoteSheetHandle } from '../components/NoteSheet';
 import InsightsCarousel from '../components/InsightsCarousel';
 import SectionTitle from '../components/SectionTitle';
+import Card from '../components/Card';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -117,12 +118,18 @@ const HomeScreen = () => {
               <Icon name="water" size={24} color={colors.primary} />
               <Text style={[styles.actionText, { color: colors.text }]}>Water Intake</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: colors.card }]}>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: colors.card }]}
+              onPress={() => navigation.navigate('ExerciseOptions')}
+            >
               <Icon name="run" size={24} color={colors.primary} />
               <Text style={[styles.actionText, { color: colors.text }]}>Exercise</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: colors.card }]}>
-              <Icon name="power-sleep" size={24} color={colors.primary} />
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: colors.card }]}
+              onPress={() => navigation.navigate('SleepOptions')}
+            >
+              <Icon name="moon-waning-crescent" size={24} color={colors.primary} />
               <Text style={[styles.actionText, { color: colors.text }]}>Sleep</Text>
             </TouchableOpacity>
             <TouchableOpacity 
@@ -172,35 +179,6 @@ const HomeScreen = () => {
             }
           />
           <InsightsCarousel />
-        </View>
-
-        <View style={styles.section}>
-          <SectionTitle 
-            label="Profile & Preferences"
-            rightContent={
-              <Pressable onPress={() => navigation.navigate('PersonalInformation')}>
-                <Text style={[styles.seeAllText, { color: colors.primary }]}>
-                  Edit Profile
-                </Text>
-              </Pressable>
-            }
-          />
-          <View style={styles.quickActions}>
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: colors.card }]}
-              onPress={() => navigation.navigate('PersonalInformation')}
-            >
-              <Icon name="account" size={24} color={colors.primary} />
-              <Text style={[styles.actionText, { color: colors.text }]}>Personal Info</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: colors.card }]}
-              onPress={() => navigation.navigate('DietPreferences')}
-            >
-              <Icon name="food-variant" size={24} color={colors.primary} />
-              <Text style={[styles.actionText, { color: colors.text }]}>Diet Preferences</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </ScrollView>
       <NoteSheet
@@ -306,6 +284,10 @@ const styles = StyleSheet.create({
   seeAllText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  actionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

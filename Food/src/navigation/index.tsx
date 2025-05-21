@@ -21,6 +21,10 @@ import InsightsFeed from '../screens/InsightsFeed';
 import InsightDetailScreen from '../screens/InsightDetailScreen';
 import PersonalInformationScreen from '../screens/PersonalInformationScreen';
 import DietPreferencesScreen from '../screens/DietPreferencesScreen';
+import ExerciseOptions from '../screens/ExerciseOptions';
+import ExerciseRecommendations from '../screens/ExerciseRecommendations';
+import SleepOptions from '../screens/SleepOptions';
+import SleepRecommendations from '../screens/SleepRecommendations';
 
 import { RootStackParamList, MainTabParamList } from './types';
 
@@ -152,6 +156,18 @@ const Navigation = () => {
           name="DietPreferences" 
           component={DietPreferencesScreen}
         />
+        <Stack.Screen 
+          name="ExerciseOptions" 
+          component={ExerciseOptions}
+          options={{ title: 'Choose Exercise' }}
+        />
+        <Stack.Screen 
+          name="ExerciseRecommendations" 
+          component={ExerciseRecommendations}
+          options={({ route }) => ({ title: route.params.type })}
+        />
+        <Stack.Screen name="SleepOptions" component={SleepOptions} options={{ title: 'Sleep Issues' }} />
+        <Stack.Screen name="SleepRecommendations" component={SleepRecommendations} options={({ route }) => ({ title: route.params.issue })} />
       </Stack.Navigator>
     </NavigationContainer>
   );
