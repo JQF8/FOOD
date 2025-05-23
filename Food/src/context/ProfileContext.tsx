@@ -32,6 +32,39 @@ interface ProfileData {
     dinnerCutoff: string;
   };
   culturalConstraint?: string;
+  healthGoals?: {
+    primaryGoal: string;
+    sleep?: {
+      currentHours: number;
+      targetHours: number;
+      currentQuality: number;
+      targetQuality: number;
+    };
+    stress?: {
+      currentLevel: number;
+      targetLevel: number;
+      mindfulnessDays: number;
+    };
+    exercise?: {
+      currentWorkouts: number;
+      targetWorkouts: number;
+      workoutLength: number;
+    };
+    hydration?: {
+      currentGlasses: number;
+      targetGlasses: number;
+    };
+    nutrition?: {
+      targetCalories: number;
+      restrictions: string[];
+    };
+  };
+  notifications?: {
+    darkMode: boolean;
+    energyMode: boolean;
+    dailySummary: boolean;
+    mealTracking: boolean;
+  };
 }
 
 interface ProfileContextType {

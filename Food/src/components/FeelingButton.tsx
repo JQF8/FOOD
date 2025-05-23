@@ -9,9 +9,10 @@ interface FeelingButtonProps {
   mood: Mood;
   label: string;
   onPress: () => void;
+  style?: any;
 }
 
-export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label, onPress }) => {
+export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label, onPress, style }) => {
   const { colors } = useTheme();
 
   const getIconName = (mood: Mood): string => {
@@ -31,26 +32,37 @@ export const FeelingButton: React.FC<FeelingButtonProps> = ({ mood, label, onPre
 
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: colors.card }]}
+      style={[styles.button, { backgroundColor: colors.card }, style]}
       onPress={onPress}
     >
       <Icon name={getIconName(mood)} size={24} color={moodColor[mood]} />
-      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
+      <Text 
+        style={[styles.label, { color: colors.text }]}
+        numberOfLines={1}
+        adjustsFontSizeToFit={true}
+        minimumFontScale={0.85}
+      >
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    width: '48%',
-    padding: 20,
-    borderRadius: 15,
+    minWidth: 72,
+    width: '22%',
+    height: 80,
+    padding: 8,
+    borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
   },
   label: {
-    marginTop: 8,
-    fontSize: 14,
+    marginTop: 4,
+    fontSize: 12,
     fontWeight: '500',
+    textAlign: 'center',
+    width: '100%',
   },
 }); 

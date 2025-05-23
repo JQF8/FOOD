@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ResearchPaper } from '../types/research';
 
 export type RootStackParamList = {
   Main: undefined;
   Home: undefined;
-  MoodCalendar: undefined;
+  MoodCalendar: { initialDate?: string };
   MoodDetail: { date: string };
   FoodDetail: { id: string };
   ExerciseOptions: undefined;
@@ -19,6 +20,12 @@ export type RootStackParamList = {
   DecreaseEating: undefined;
   FoodScreen: undefined;
   WellnessScreen: undefined;
+  WaterScreen: undefined;
+  ResearchDetail: { paper: ResearchPaper };
+  ResearchList: undefined;
+  TrackMeal: undefined;
+  HealthGoals: undefined;
+  Notifications: undefined;
 };
 
 export type MainTabParamList = {

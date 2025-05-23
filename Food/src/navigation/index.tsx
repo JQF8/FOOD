@@ -25,6 +25,10 @@ import ExerciseOptions from '../screens/ExerciseOptions';
 import ExerciseRecommendations from '../screens/ExerciseRecommendations';
 import SleepOptions from '../screens/SleepOptions';
 import SleepRecommendations from '../screens/SleepRecommendations';
+import WaterScreen from '../screens/WaterScreen';
+import TrackMealScreen from '../screens/TrackMealScreen';
+import HealthGoalsScreen from '../screens/HealthGoalsScreen';
+import NotificationsScreen from '../screens/NotificationsScreen';
 
 import { RootStackParamList, MainTabParamList } from './types';
 
@@ -166,8 +170,34 @@ const Navigation = () => {
           component={ExerciseRecommendations}
           options={({ route }) => ({ title: route.params.type })}
         />
-        <Stack.Screen name="SleepOptions" component={SleepOptions} options={{ title: 'Sleep Issues' }} />
-        <Stack.Screen name="SleepRecommendations" component={SleepRecommendations} options={({ route }) => ({ title: route.params.issue })} />
+        <Stack.Screen 
+          name="SleepOptions" 
+          component={SleepOptions} 
+          options={{ title: 'Sleep Issues' }} 
+        />
+        <Stack.Screen 
+          name="SleepRecommendations" 
+          component={SleepRecommendations} 
+          options={({ route }) => ({ title: route.params.issue })} 
+        />
+        <Stack.Screen 
+          name="WaterScreen" 
+          component={WaterScreen} 
+          options={{ title: 'Water Tracking' }} 
+        />
+        <Stack.Screen 
+          name="TrackMeal" 
+          component={TrackMealScreen}
+          options={{ title: 'Track Meal' }}
+        />
+        <Stack.Screen 
+          name="HealthGoals" 
+          component={HealthGoalsScreen}
+        />
+        <Stack.Screen 
+          name="Notifications" 
+          component={NotificationsScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

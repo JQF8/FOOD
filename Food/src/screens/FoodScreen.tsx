@@ -55,6 +55,19 @@ const FoodScreen: React.FC = () => {
           <Text style={[styles.subtitle, { color: colors.text }]}>Based on your wellness goals</Text>
         </View>
 
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Meal Planning</Text>
+          <TouchableOpacity style={[styles.mealPlanCard, { backgroundColor: colors.card }]}>
+            <Icon name="calendar-clock" size={24} color={colors.primary} />
+            <View style={styles.mealPlanInfo}>
+              <Text style={[styles.mealPlanTitle, { color: colors.text }]}>Create Weekly Meal Plan</Text>
+              <Text style={[styles.mealPlanDescription, { color: colors.text }]}>
+                Get personalized meal suggestions based on your wellness goals
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {foodCategories.map((category, index) => (
           <View key={index} style={styles.section}>
             <View style={styles.categoryHeader}>
@@ -77,19 +90,6 @@ const FoodScreen: React.FC = () => {
             ))}
           </View>
         ))}
-
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Meal Planning</Text>
-          <TouchableOpacity style={[styles.mealPlanCard, { backgroundColor: colors.card }]}>
-            <Icon name="calendar-clock" size={24} color={colors.primary} />
-            <View style={styles.mealPlanInfo}>
-              <Text style={[styles.mealPlanTitle, { color: colors.text }]}>Create Weekly Meal Plan</Text>
-              <Text style={[styles.mealPlanDescription, { color: colors.text }]}>
-                Get personalized meal suggestions based on your wellness goals
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

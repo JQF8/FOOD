@@ -3,10 +3,32 @@ import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LineChart } from 'react-native-chart-kit';
 import { useTheme } from '../context/ThemeContext';
+import { ProgressCard } from '../components/ProgressCard';
 
 const WellnessScreen: React.FC = () => {
   const { colors } = useTheme();
   
+  const progressMetrics = [
+    {
+      name: 'Sleep Quality',
+      current: 75,
+      goal: 85,
+      avgDailyChange: 2.5,
+    },
+    {
+      name: 'Stress Level',
+      current: 65,
+      goal: 80,
+      avgDailyChange: 1.8,
+    },
+    {
+      name: 'Hydration',
+      current: 70,
+      goal: 90,
+      avgDailyChange: 3.2,
+    },
+  ];
+
   const chartData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
@@ -48,29 +70,7 @@ const WellnessScreen: React.FC = () => {
 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Current Status</Text>
-          <View style={[styles.statusCard, { backgroundColor: colors.card }]}>
-            <Text style={[styles.statusTitle, { color: colors.text }]}>Sleep Quality</Text>
-            <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
-              <View style={[styles.progress, { width: '75%', backgroundColor: colors.primary }]} />
-            </View>
-            <Text style={[styles.statusValue, { color: colors.text }]}>75%</Text>
-          </View>
-
-          <View style={[styles.statusCard, { backgroundColor: colors.card }]}>
-            <Text style={[styles.statusTitle, { color: colors.text }]}>Stress Level</Text>
-            <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
-              <View style={[styles.progress, { width: '30%', backgroundColor: colors.success }]} />
-            </View>
-            <Text style={[styles.statusValue, { color: colors.text }]}>30%</Text>
-          </View>
-
-          <View style={[styles.statusCard, { backgroundColor: colors.card }]}>
-            <Text style={[styles.statusTitle, { color: colors.text }]}>Hydration</Text>
-            <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
-              <View style={[styles.progress, { width: '60%', backgroundColor: colors.info }]} />
-            </View>
-            <Text style={[styles.statusValue, { color: colors.text }]}>60%</Text>
-          </View>
+          <ProgressCard metrics={progressMetrics} />
         </View>
 
         <View style={styles.section}>

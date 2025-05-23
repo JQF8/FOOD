@@ -27,12 +27,12 @@ const ProfileScreen: React.FC = () => {
     {
       title: 'Health Goals',
       icon: 'target',
-      onPress: () => {},
+      onPress: () => navigation.navigate('HealthGoals'),
     },
     {
       title: 'Notifications',
       icon: 'bell',
-      onPress: () => {},
+      onPress: () => navigation.navigate('Notifications'),
     },
   ];
 

@@ -7,6 +7,7 @@ import { MoodProvider } from './context/MoodContext';
 import Navigation from './navigation';
 import { ProfileProvider } from './context/ProfileContext';
 import { AppRegistry } from 'react-native';
+import { UIKittenProvider } from './providers/UIKittenProvider';
 
 const App = () => {
   return (
@@ -15,7 +16,9 @@ const App = () => {
         <ThemeProvider>
           <MoodProvider>
             <ProfileProvider>
-              <Navigation />
+              <UIKittenProvider>
+                <Navigation />
+              </UIKittenProvider>
             </ProfileProvider>
           </MoodProvider>
         </ThemeProvider>
