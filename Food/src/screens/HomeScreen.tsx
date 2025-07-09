@@ -1,289 +1,243 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Pressable } from 'react-native';
-import { useTheme } from '../context/ThemeContext';
-import { MoodToFood } from '../components/MoodToFood';
-import { FeelingButton } from '../components/FeelingButton';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../navigation/types';
-import { saveMood } from '../storage/moodStorage';
-import { Mood } from '../types/mood';
-import dayjs from 'dayjs';
-import { useProfile } from '../hooks/useProfile';
-import { getPartOfDay } from '../utils/timeUtils';
-import NoteSheet, { NoteSheetHandle } from '../components/NoteSheet';
-import InsightsCarousel from '../components/InsightsCarousel';
-import SectionTitle from '../components/SectionTitle';
-import Card from '../components/Card';
-import { Icon } from '../components/Icon';
-import { ResearchInsights } from '../components/ResearchInsights';
+import { useTheme } from '../context/ThemeContext';
+import { MoodButton } from '../components/MoodButton';
+import { QuickActionCard } from '../components/QuickActionCard';
+import { InsightCard } from '../components/InsightCard';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const HomeScreen = () => {
-  const { colors, theme, toggleTheme } = useTheme();
-  const [showMoodToFood, setShowMoodToFood] = useState(false);
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-  const { profile } = useProfile();
-  const noteSheetRef = useRef<NoteSheetHandle>(null);
-  const partOfDay = getPartOfDay();
+// Layout Constants
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const INSIGHT_CARD_WIDTH = SCREEN_WIDTH * 0.8;
 
-  const onMoodPress = (mood: Mood) => {
-    noteSheetRef.current?.open(mood);
-  };
+// Spacing Constants
+const SPACING = {
+  xs: 2, // reduced from 4
+  sm: 4, // reduced from 8
+  md: 6, // reduced from 12
+  lg: 8, // reduced from 16
+  xl: 12, // reduced from 24
+} as const;
+
+const LAYOUT = {
+  headerTopPadding: SPACING.sm,
+  sectionGap: SPACING.lg, // reduced from xl
+  gridGap: SPACING.md, // reduced from md
+  cardGap: SPACING.md, // reduced from lg
+  bottomPadding: SPACING.lg, // reduced from xl
+} as const;
+
+export const HomeScreen = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    console.log('✅ HomeScreen mounted');
+  }, []);
+
+  const moods = [
+    { emoji: '😊', label: 'Happy' },
+    { emoji: '😐', label: 'Neutral' },
+    { emoji: '😔', label: 'Sad' },
+    { emoji: '😡', label: 'Angry' },
+    { emoji: '😴', label: 'Tired' },
+  ];
 
   const quickActions = [
     {
+      icon: 'water-outline',
+      title: 'Water',
+      screen: 'WaterScreen' as const,
+    },
+    {
+      icon: 'nutrition-outline',
       title: 'Track Meal',
-      icon: 'food',
-      onPress: () => navigation.navigate('TrackMeal'),
+      screen: 'TrackMeal' as const,
     },
     {
-      title: 'Water Intake',
-      icon: 'water',
-      onPress: () => navigation.navigate('WaterScreen'),
+      icon: 'add-circle-outline',
+      title: 'Increase Eating',
+      screen: 'IncreaseEating' as const,
     },
     {
-      title: 'Exercise',
-      icon: 'dumbbell',
-      onPress: () => navigation.navigate('ExerciseOptions'),
+      icon: 'remove-circle-outline',
+      title: 'Decrease Eating',
+      screen: 'DecreaseEating' as const,
+    },
+  ] as const;
+
+  type QuickActionScreen = typeof quickActions[number]['screen'];
+
+  const insights = [
+    {
+      id: '1',
+      title: 'Understanding Your Eating Patterns',
+      image: 'https://picsum.photos/200/100',
+      tags: ['Nutrition', 'Behavior'],
     },
     {
-      title: 'Sleep',
-      icon: 'sleep',
-      onPress: () => navigation.navigate('SleepOptions'),
+      id: '2',
+      title: 'The Science of Hunger',
+      image: 'https://picsum.photos/200/100',
+      tags: ['Research', 'Health'],
     },
   ];
 
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
-          <View>
-            <Text
-              style={{
-                fontSize: 28,
-                fontWeight: '700',
-                color: colors.text,
-              }}
-            >
-              {`Good ${partOfDay},`}
+  const handleMoodSelect = (mood: string) => {
+    setSelectedMood(mood);
+    navigation.navigate('MoodCalendar', { initialDate: new Date().toISOString().split('T')[0] });
+  };
+
+  const handleQuickAction = (screen: QuickActionScreen) => {
+    navigation.navigate(screen);
+  };
+
+  if (error) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ color: colors.text }}>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  try {
+    return (
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        contentContainerStyle={[
+          styles.contentContainer,
+          {
+            paddingTop: insets.top + LAYOUT.headerTopPadding,
+            paddingBottom: LAYOUT.bottomPadding,
+          }
+        ]}
+      >
+        <View style={styles.section}>
+          <View style={styles.headerRow}>
+            <Text style={[styles.heading, { color: colors.text }]}>
+              How are you feeling?
             </Text>
-
-            {profile.fullName?.trim().length ? (
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontWeight: '500',
-                  color: colors.text,
-                  marginBottom: 8,
-                }}
-              >
-                {profile.fullName.trim()}
-              </Text>
-            ) : (
-              <View style={{ marginBottom: 8 }}/>
-            )}
-
-            <Text style={[styles.subtitle, { color: colors.text }]}>Let's check your mood today</Text>
           </View>
-          <View style={styles.headerButtons}>
-            <TouchableOpacity 
-              style={[styles.headerButton, { backgroundColor: colors.card }]}
-              onPress={toggleTheme}
-            >
-              <Icon 
-                name={theme === 'dark' ? 'white-balance-sunny' : 'moon-waning-crescent'} 
-                size={24} 
-                color={colors.primary} 
+          <FlatList
+            data={moods}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.moodList}
+            renderItem={({ item }) => (
+              <MoodButton
+                emoji={item.emoji}
+                label={item.label}
+                isSelected={selectedMood === item.label}
+                onPress={() => handleMoodSelect(item.label)}
               />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.headerButton, { backgroundColor: colors.card }]}
-            >
-              <Icon name="bell-outline" size={24} color={colors.primary} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.moodSection}>
-          <Text style={[styles.moodTitle, { color: colors.text }]}>How are you feeling?</Text>
-          <View style={styles.moodContainer}>
-            <FeelingButton 
-              mood="happy" 
-              label="Happy" 
-              onPress={() => onMoodPress('happy')} 
-              style={styles.moodButton}
-            />
-            <FeelingButton 
-              mood="soso" 
-              label="So-so" 
-              onPress={() => onMoodPress('soso')} 
-              style={styles.moodButton}
-            />
-            <FeelingButton 
-              mood="stressed" 
-              label="Stressed" 
-              onPress={() => onMoodPress('stressed')} 
-              style={styles.moodButton}
-            />
-            <FeelingButton 
-              mood="tired" 
-              label="Tired" 
-              onPress={() => onMoodPress('tired')} 
-              style={styles.moodButton}
-            />
-          </View>
+            )}
+            keyExtractor={(item) => item.label}
+          />
         </View>
 
         <View style={styles.section}>
-          <SectionTitle 
-            label="Quick Actions"
-            rightContent={
-              <TouchableOpacity 
-                onPress={() => navigation.navigate('MoodCalendar')}
-                style={styles.calendarLink}
-              >
-                <Text style={[styles.calendarLinkText, { color: colors.primary }]}>
-                  View Mood Calendar
-                </Text>
-              </TouchableOpacity>
-            }
-          />
-          <View style={styles.quickActionsGrid}>
-            {quickActions.map((action, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[styles.quickActionButton, { backgroundColor: colors.card }]}
-                onPress={action.onPress}
-              >
-                <Icon name={action.icon} size={24} color={colors.primary} />
-                <Text style={[styles.quickActionText, { color: colors.text }]}>{action.title}</Text>
-              </TouchableOpacity>
+          <View style={styles.headerRow}>
+            <Text style={[styles.heading, { color: colors.text }]}>
+              Quick Actions
+            </Text>
+          </View>
+          <View style={styles.grid}>
+            {quickActions.map((action) => (
+              <QuickActionCard
+                key={action.title}
+                icon={action.icon}
+                title={action.title}
+                onPress={() => handleQuickAction(action.screen)}
+              />
             ))}
           </View>
         </View>
 
         <View style={styles.section}>
-          <Card>
-            <ResearchInsights />
-          </Card>
+          <View style={styles.headerRow}>
+            <Text style={[styles.heading, { color: colors.text }]}>
+              Insights
+            </Text>
+          </View>
+          <FlatList
+            data={insights}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToAlignment="start"
+            snapToInterval={INSIGHT_CARD_WIDTH + LAYOUT.cardGap}
+            decelerationRate="fast"
+            contentContainerStyle={styles.insightList}
+            renderItem={({ item }) => (
+              <View style={styles.insightCard}>
+                <InsightCard
+                  key={item.id}
+                  title={item.title}
+                  image={item.image}
+                  tags={item.tags}
+                  onPress={() => navigation.navigate('InsightDetail', { id: item.id })}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.id}
+          />
         </View>
       </ScrollView>
-      <NoteSheet
-        ref={noteSheetRef}
-        onSave={async (mood, note) => {
-          const today = dayjs().format('YYYY-MM-DD');
-          await saveMood(today, mood, note);
-          navigation.navigate('MoodCalendar', { initialDate: today });
-        }}
-      />
-    </SafeAreaView>
-  );
+    );
+  } catch (e) {
+    setError(e instanceof Error ? e : new Error('Unknown error occurred'));
+    return null;
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollView: {
-    flex: 1,
+  contentContainer: {
+    padding: SPACING.md, // reduced from lg
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    marginBottom: 16,
-  },
-  headerButtons: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  headerButton: {
-    padding: 8,
-    borderRadius: 12,
-  },
-  greeting: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 16,
-    opacity: 0.7,
-  },
-  moodSection: {
-    padding: 20,
-    paddingBottom: 8,
-    marginBottom: 16,
-  },
-  moodTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  moodContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  moodButton: {
-    minWidth: 72,
-    width: '22%',
+  headerRow: {
+    paddingHorizontal: SPACING.md, // reduced from lg
+    marginBottom: SPACING.sm, // reduced from md
   },
   section: {
-    padding: 20,
-    paddingTop: 8,
-    paddingBottom: 8,
-    marginBottom: 16,
+    marginBottom: LAYOUT.sectionGap,
   },
-  calendarLink: {
-    padding: 5,
+  heading: {
+    fontSize: 20, // reduced from 24
+    fontWeight: '600',
   },
-  calendarLinkText: {
-    fontSize: 14,
-    fontWeight: '500',
+  moodList: {
+    paddingRight: SPACING.md, // reduced from lg
   },
-  quickActionsGrid: {
+  grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 10,
+    rowGap: LAYOUT.gridGap,
+    columnGap: 0,
   },
-  quickActionButton: {
-    width: '48%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+  insightList: {
+    paddingHorizontal: SPACING.md, // reduced from lg
   },
-  quickActionText: {
-    marginTop: 8,
-    fontSize: 14,
-    fontWeight: '500',
+  insightCard: {
+    width: INSIGHT_CARD_WIDTH * 0.85, // reduced width
+    marginRight: LAYOUT.cardGap,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  moodToFoodContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 1000,
-  },
-});
-
-export default HomeScreen; 
+}); 

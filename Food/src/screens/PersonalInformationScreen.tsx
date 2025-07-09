@@ -15,12 +15,24 @@ import { useTheme } from '../context/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useProfile } from '../context/ProfileContext';
 import { Picker } from '@react-native-picker/picker';
 import { useLocalization } from '../hooks/useLocalization';
 import { Chip } from '../components/Chip';
 import { InfoSheet } from '../components/InfoSheet';
+
+type RootStackParamList = {
+  Login: undefined;
+  MainTabs: undefined;
+  Notifications: undefined;
+  PersonalInformation: undefined;
+  DietPreferences: undefined;
+  HealthGoals: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string().required('Full name is required'),
@@ -61,9 +73,9 @@ const ALLERGIES = [
   'Sesame',
 ];
 
-export default function PersonalInformationScreen() {
+const PersonalInformationScreen = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const { profile, updateProfile, isLoading } = useProfile();
   const { isMetric } = useLocalization();
   const [showInfoSheet, setShowInfoSheet] = useState(false);
@@ -483,7 +495,7 @@ export default function PersonalInformationScreen() {
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -579,4 +591,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-}); 
+});
+
+export default PersonalInformationScreen; 

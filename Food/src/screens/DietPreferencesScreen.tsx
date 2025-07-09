@@ -6,15 +6,22 @@ import {
   ScrollView,
   Pressable,
   TextInput,
+  TouchableOpacity,
+  Switch,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Chip } from '../components/Chip';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { useProfile } from '../hooks/useProfile';
+import { Icon as CustomIcon } from '../components/Icon';
+import { RootStackParamList } from '../navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const DIET_STYLES = [
   'None',
@@ -47,10 +54,10 @@ const CULTURAL_CONSTRAINTS = [
   'Jain',
 ];
 
-export default function DietPreferencesScreen() {
+const DietPreferencesScreen = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation();
-  const { updateProfile } = useProfile();
+  const navigation = useNavigation<NavigationProp>();
+  const { profile, updateProfile } = useProfile();
   const [selectedDietStyle, setSelectedDietStyle] = useState('None');
   const [foodsToAvoid, setFoodsToAvoid] = useState<string[]>([]);
   const [dislikes, setDislikes] = useState<string[]>([]);
@@ -423,4 +430,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-}); 
+});
+
+export default DietPreferencesScreen; 

@@ -7,7 +7,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,17 +18,40 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.food.app"
+      "bundleIdentifier": "com.yourcompany.food",
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "This app needs access to your local network to connect to the development server",
+        "NSBonjourServices": ["_expo._tcp"]
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.food.app"
+      "package": "com.yourcompany.food",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "developmentClient": true,
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "cli": {
+      "defaultConnectionType": "tunnel"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "YOUR_API_KEY",
+        "authDomain": "YOUR_AUTH_DOMAIN",
+        "projectId": "YOUR_PROJECT_ID",
+        "storageBucket": "YOUR_STORAGE_BUCKET",
+        "messagingSenderId": "YOUR_MESSAGING_SENDER_ID",
+        "appId": "YOUR_APP_ID"
+      }
     }
   }
 } 

@@ -10,12 +10,21 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Icon } from '../components/Icon';
 import { useProfile } from '../hooks/useProfile';
 
+type RootStackParamList = {
+  Login: undefined;
+  MainTabs: undefined;
+  Notifications: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const NotificationsScreen = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const { profile, updateProfile } = useProfile();
 
   const notificationSettings = [

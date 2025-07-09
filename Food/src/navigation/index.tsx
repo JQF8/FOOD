@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { enableScreens } from 'react-native-screens';
 
 // Enable screens for better performance
@@ -14,6 +15,7 @@ import HomeScreen from '../screens/HomeScreen';
 import WellnessScreen from '../screens/WellnessScreen';
 import FoodScreen from '../screens/FoodScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import LoginScreen from '../screens/LoginScreen';
 import FoodDetailScreen from '../screens/FoodDetailScreen';
 import IncreaseEatingScreen from '../screens/IncreaseEatingScreen';
 import { MoodCalendarScreen } from '../screens/MoodCalendarScreen';
@@ -117,10 +119,15 @@ const styles = StyleSheet.create({
 });
 
 const Navigation = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null; // Or a loading screen
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Main"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -128,76 +135,79 @@ const Navigation = () => {
           gestureDirection: 'horizontal',
         }}
       >
-        <Stack.Screen 
-          name="Main" 
-          component={MainTabs}
-        />
-        <Stack.Screen 
-          name="FoodDetail" 
-          component={FoodDetailScreen}
-        />
-        <Stack.Screen 
-          name="IncreaseEating" 
-          component={IncreaseEatingScreen}
-        />
-        <Stack.Screen 
-          name="MoodCalendar" 
-          component={MoodCalendarScreen}
-        />
-        <Stack.Screen 
-          name="InsightsFeed" 
-          component={InsightsFeed}
-        />
-        <Stack.Screen 
-          name="InsightDetail" 
-          component={InsightDetailScreen}
-        />
-        <Stack.Screen 
-          name="PersonalInformation" 
-          component={PersonalInformationScreen}
-        />
-        <Stack.Screen 
-          name="DietPreferences" 
-          component={DietPreferencesScreen}
-        />
-        <Stack.Screen 
-          name="ExerciseOptions" 
-          component={ExerciseOptions}
-          options={{ title: 'Choose Exercise' }}
-        />
-        <Stack.Screen 
-          name="ExerciseRecommendations" 
-          component={ExerciseRecommendations}
-          options={({ route }) => ({ title: route.params.type })}
-        />
-        <Stack.Screen 
-          name="SleepOptions" 
-          component={SleepOptions} 
-          options={{ title: 'Sleep Issues' }} 
-        />
-        <Stack.Screen 
-          name="SleepRecommendations" 
-          component={SleepRecommendations} 
-          options={({ route }) => ({ title: route.params.issue })} 
-        />
-        <Stack.Screen 
-          name="WaterScreen" 
-          component={WaterScreen} 
-          options={{ title: 'Water Tracking' }} 
-        />
-        <Stack.Screen 
-          name="TrackMeal" 
-          component={TrackMealScreen}
-          options={{ title: 'Track Meal' }}
-        />
-        <Stack.Screen 
-          name="HealthGoals" 
-          component={HealthGoalsScreen}
-        />
-        <Stack.Screen 
-          name="Notifications" 
-          component={NotificationsScreen}
-        />
+        {user ? (
+          <>
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen 
+              name="FoodDetail" 
+              component={FoodDetailScreen}
+            />
+            <Stack.Screen 
+              name="IncreaseEating" 
+              component={IncreaseEatingScreen}
+            />
+            <Stack.Screen 
+              name="MoodCalendar" 
+              component={MoodCalendarScreen}
+            />
+            <Stack.Screen 
+              name="InsightsFeed" 
+              component={InsightsFeed}
+            />
+            <Stack.Screen 
+              name="InsightDetail" 
+              component={InsightDetailScreen}
+            />
+            <Stack.Screen 
+              name="PersonalInformation" 
+              component={PersonalInformationScreen}
+            />
+            <Stack.Screen 
+              name="DietPreferences" 
+              component={DietPreferencesScreen}
+            />
+            <Stack.Screen 
+              name="ExerciseOptions" 
+              component={ExerciseOptions}
+              options={{ title: 'Choose Exercise' }}
+            />
+            <Stack.Screen 
+              name="ExerciseRecommendations" 
+              component={ExerciseRecommendations}
+              options={({ route }) => ({ title: route.params.type })}
+            />
+            <Stack.Screen 
+              name="SleepOptions" 
+              component={SleepOptions} 
+              options={{ title: 'Sleep Issues' }} 
+            />
+            <Stack.Screen 
+              name="SleepRecommendations" 
+              component={SleepRecommendations} 
+              options={({ route }) => ({ title: route.params.issue })} 
+            />
+            <Stack.Screen 
+              name="WaterScreen" 
+              component={WaterScreen} 
+              options={{ title: 'Water Tracking' }} 
+            />
+            <Stack.Screen 
+              name="TrackMeal" 
+              component={TrackMealScreen}
+              options={{ title: 'Track Meal' }}
+            />
+            <Stack.Screen 
+              name="HealthGoals" 
+              component={HealthGoalsScreen}
+            />
+            <Stack.Screen 
+              name="Notifications" 
+              component={NotificationsScreen}
+            />
+          </>
+        ) : (
+          <Stack.Screen name="Login" component={LoginScreen} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

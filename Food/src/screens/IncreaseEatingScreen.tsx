@@ -1,183 +1,138 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const IncreaseEatingScreen: React.FC = () => {
+export default function IncreaseEatingScreen() {
   const { colors } = useTheme();
-  
-  const foodCategories = [
+  const insets = useSafeAreaInsets();
+  const [selectedStrategy, setSelectedStrategy] = useState<string | null>(null);
+
+  const strategies = [
     {
-      title: 'High Calorie Foods',
-      icon: 'fire',
-      foods: [
-        { name: 'Avocado', benefits: 'Healthy fats and high calories', calories: '322 kcal/200g' },
-        { name: 'Nuts & Seeds', benefits: 'Dense in calories and nutrients', calories: '607 kcal/100g' },
-        { name: 'Olive Oil', benefits: 'Healthy fats for weight gain', calories: '884 kcal/100g' },
-      ],
+      id: '1',
+      title: 'Add Healthy Snacks',
+      description: 'Include nutrient-dense snacks between meals',
+      icon: 'nutrition-outline',
     },
     {
-      title: 'Protein Rich',
-      icon: 'food-steak',
-      foods: [
-        { name: 'Salmon', benefits: 'High in protein and healthy fats', calories: '208 kcal/100g' },
-        { name: 'Greek Yogurt', benefits: 'Protein and probiotics', calories: '130 kcal/100g' },
-        { name: 'Eggs', benefits: 'Complete protein source', calories: '155 kcal/100g' },
-      ],
+      id: '2',
+      title: 'Increase Portion Sizes',
+      description: 'Gradually increase your meal portions',
+      icon: 'restaurant-outline',
     },
     {
-      title: 'Carbohydrate Sources',
-      icon: 'bread-slice',
-      foods: [
-        { name: 'Sweet Potatoes', benefits: 'Complex carbs and vitamins', calories: '86 kcal/100g' },
-        { name: 'Quinoa', benefits: 'Complete protein and carbs', calories: '120 kcal/100g' },
-        { name: 'Brown Rice', benefits: 'Fiber-rich complex carbs', calories: '112 kcal/100g' },
-      ],
+      id: '3',
+      title: 'Add Protein-Rich Foods',
+      description: 'Include more protein in your diet',
+      icon: 'fitness-outline',
+    },
+    {
+      id: '4',
+      title: 'Track Your Progress',
+      description: 'Monitor your calorie intake and weight',
+      icon: 'analytics-outline',
     },
   ];
 
+  const handleStrategySelect = (strategyId: string) => {
+    setSelectedStrategy(strategyId);
+    // TODO: Implement strategy selection logic
+  };
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView>
-        <View style={[styles.header, { backgroundColor: colors.primary }]}>
-          <Text style={[styles.title, { color: '#FFFFFF' }]}>Increase Eating</Text>
-          <Text style={[styles.subtitle, { color: '#FFFFFF' }]}>Healthy weight gain foods</Text>
-        </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Increase Eating</Text>
+      </View>
 
-        {foodCategories.map((category, index) => (
-          <View key={index} style={styles.section}>
-            <View style={styles.categoryHeader}>
-              <Icon name={category.icon} size={24} color={colors.primary} />
-              <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
-            </View>
+      <ScrollView style={styles.content}>
+        <Text style={[styles.subtitle, { color: colors.text }]}>
+          Choose a strategy to help increase your food intake:
+        </Text>
 
-            {category.foods.map((food, foodIndex) => (
-              <TouchableOpacity
-                key={foodIndex}
-                style={[styles.foodCard, { backgroundColor: colors.card }]}
-              >
-                <View style={styles.foodInfo}>
-                  <Text style={[styles.foodName, { color: colors.text }]}>{food.name}</Text>
-                  <Text style={[styles.foodBenefits, { color: colors.text }]}>{food.benefits}</Text>
-                  <Text style={[styles.calories, { color: colors.primary }]}>{food.calories}</Text>
-                </View>
-                <Icon name="chevron-right" size={24} color={colors.text} />
-              </TouchableOpacity>
-            ))}
-          </View>
-        ))}
-
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Meal Planning</Text>
-          <TouchableOpacity style={[styles.mealPlanCard, { backgroundColor: colors.card }]}>
-            <Icon name="calendar-clock" size={24} color={colors.primary} />
-            <View style={styles.mealPlanInfo}>
-              <Text style={[styles.mealPlanTitle, { color: colors.text }]}>Create Weekly Meal Plan</Text>
-              <Text style={[styles.mealPlanDescription, { color: colors.text }]}>
-                Get personalized meal suggestions for healthy weight gain
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <View style={styles.strategiesContainer}>
+          {strategies.map((strategy) => (
+            <TouchableOpacity
+              key={strategy.id}
+              style={[
+                styles.strategyCard,
+                { 
+                  backgroundColor: colors.card,
+                  borderColor: selectedStrategy === strategy.id ? colors.primary : colors.border,
+                },
+              ]}
+              onPress={() => handleStrategySelect(strategy.id)}
+            >
+              <Icon 
+                name={strategy.icon} 
+                size={24} 
+                color={selectedStrategy === strategy.id ? colors.primary : colors.text} 
+              />
+              <View style={styles.strategyContent}>
+                <Text style={[styles.strategyTitle, { color: colors.text }]}>
+                  {strategy.title}
+                </Text>
+                <Text style={[styles.strategyDescription, { color: colors.text + '80' }]}>
+                  {strategy.description}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   header: {
-    padding: 20,
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.1)',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 16,
-    opacity: 0.8,
+    marginBottom: 24,
   },
-  section: {
-    padding: 20,
+  strategiesContainer: {
+    gap: 16,
   },
-  categoryHeader: {
+  strategyCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
   },
-  categoryTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  foodCard: {
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  foodInfo: {
+  strategyContent: {
+    marginLeft: 16,
     flex: 1,
   },
-  foodName: {
+  strategyTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  foodBenefits: {
-    fontSize: 14,
-    opacity: 0.8,
-    marginBottom: 5,
-  },
-  calories: {
-    fontSize: 14,
     fontWeight: '600',
+    marginBottom: 4,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  mealPlanCard: {
-    padding: 15,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  mealPlanInfo: {
-    marginLeft: 15,
-    flex: 1,
-  },
-  mealPlanTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  mealPlanDescription: {
+  strategyDescription: {
     fontSize: 14,
-    opacity: 0.8,
   },
-});
-
-export default IncreaseEatingScreen; 
+}); 

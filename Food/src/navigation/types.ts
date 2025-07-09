@@ -2,8 +2,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ResearchPaper } from '../types/research';
 
 export type RootStackParamList = {
-  Main: undefined;
-  Home: undefined;
+  Login: undefined;
+  MainTabs: undefined;
+  Notifications: undefined;
+  PersonalInformation: undefined;
+  DietPreferences: undefined;
+  HealthGoals: undefined;
   MoodCalendar: { initialDate?: string };
   MoodDetail: { date: string };
   FoodDetail: { id: string };
@@ -12,26 +16,21 @@ export type RootStackParamList = {
   SleepOptions: undefined;
   SleepRecommendations: { issue: 'Difficulty Falling Asleep' | 'Difficulty Staying Asleep' | 'Waking Too Early' };
   Profile: undefined;
-  DietPreferences: undefined;
-  PersonalInformation: undefined;
   InsightsFeed: undefined;
   InsightDetail: { id: string };
   IncreaseEating: undefined;
   DecreaseEating: undefined;
-  FoodScreen: undefined;
-  WellnessScreen: undefined;
+  TrackMeal: undefined;
   WaterScreen: undefined;
   ResearchDetail: { paper: ResearchPaper };
   ResearchList: undefined;
-  TrackMeal: undefined;
-  HealthGoals: undefined;
-  Notifications: undefined;
 };
 
 export type MainTabParamList = {
   Home: undefined;
-  Wellness: undefined;
+  Mood: undefined;
   Food: undefined;
+  Wellness: undefined;
   Profile: undefined;
 };
 
